@@ -1,0 +1,169 @@
+{% extends 'bases.html' %}
+{% load static %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block content %}
+    <br>
+    <h1>{{ post.title }}</h1>
+    <div class="article-metadata">
+        <small class="text-muted fa fa-calendar" aria-hidden="true">
+            &nbsp;&nbsp;{{ post.created_at }}
+        </small>&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="fa fa-eye text-muted" aria-hidden="true">
+            &nbsp;&nbsp;{{ post.views }}
+        </i>&nbsp;&nbsp;&nbsp;&nbsp;
+        <i class="fa fa-pencil text-muted" aria-hidden="true">
+            &nbsp;&nbsp;{{ post.comments.all.count }}
+        </i>
+    </div>
+    <hr><br>
+    {{ post.content | safe }}
+    <hr>
+    <div class="article-metadata">
+        <small class="text-muted fa fa-user" aria-hidden="true">
+            &nbsp;&nbsp;{{ post.author }}
+        </small>
+    </div><br>
+    <form action="{% url 'like-post' %}" method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            {% if liked %}
+                <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-danger">
+                    Unlike {{ total_likes }}
+                </button>
+            {% else %}
+                <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary">
+                    Like
+                </button>
+            {% endif %}
+        {% else %}
+            <br><b>Jami likelar soni: {{ total_likes }} ta</b>
+        {% endif %}
+    </form>
+    <hr>
+    <h2>Kommentariyalar ({{ post.comments.count }})</h2>
+    <hr>
+    {% for comment in post.comments.all %}
+        <article class="media content-section shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="row my-3">
+                <div class="col-md-1">
+                    <img class="rounded mx-auto d-block w-100 p-2 border border-dark"
+                         src="{% static 'images/default.png' %}" alt="user">
+                </div>
+                <div class="col-md-11">
+                    <strong class="text-muted fa fa-calendar" aria-hidden="true">
+                        &nbsp;&nbsp;{{ comment.date_add }} - {{ comment.user.first_name }} {{ comment.user.last_name }}
+                    </strong>
+                    <div>{{ comment.body }}</div>
+                    <div class="reply mx-0">
+                        <p>
+                            <button class="btn btn-sm btn-primary fa fa-reply" type="button" data-toggle="collapse"
+                                    data-target="#replyBox{{ comment.pk }}" aria-expanded="false"
+                                    aria-controls="replyBox{{ comment.pk }}">
+                                &nbsp;Javob berish ({{ comment.replies.all.count }})
+                            </button>
+                        <div class="collapse" id="replyBox{{ comment.pk }}">
+                            <div class="card card-body my-2">
+                                {% if user.is_authenticated %}
+                                    <form action="{% url 'reply-comment' comment.pk %}" method="post"
+                                          class="reply-form">
+                                        <div class="form-group">
+                                            {% csrf_token %}
+                                            <div>
+                                            <textarea name="reply_body" class="form-control"
+                                                      aria-label="Sizing example input"
+                                                      aria-describedby="inputGroup-sizing-default"
+                                                      placeholder="Iltimos kommentariyani bu yerga yozing!!!"
+                                                      required></textarea>
+                                                <input type="hidden" name="replies" value="{{ comment.pk }}">
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary fa fa-comment">&nbsp;Javob yo'llash</button>
+                                    </form>
+                                {% else %}
+                                    <b>Javob yo'lash uchun <a href="{% url 'login' %}">ro'yxatdan o'ting.</a></b>
+                                {% endif %}
+                                {% for foo in comment.replies.all %}
+                                    <div class="col-md-12 post-list">
+                                        <article class="media content-section shadow-lg p-3 mb-5 bg-white rounded">
+                                            <div class="col-md-1">
+                                                <img class="rounded mx-auto d-block w-100 p-2 border border-dark"
+                                                     src="{% static 'images/default.png' %}" alt="user">
+                                            </div>
+                                            <div>
+                                                <strong class="text-muted fa fa-calendar" aria-hidden="true">
+                                                    &nbsp;&nbsp;{{ foo.date_add }}
+                                                    - {{ foo.user.first_name }} {{ foo.user.last_name }}
+                                                </strong>
+                                                <div class="col-md-12">
+                                                    {{ foo.reply_body }}
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <form action="{% url 'add-comment' post.pk %}" method="post">
+            <div class="form-group">
+                {% csrf_token %}
+                <div>
+                    <textarea name="body" class="form-control" aria-label="Sizing example input"
+                              aria-describedby="inputGroup-sizing-default"
+                              placeholder="Iltimos kommentariyani bu yerga yozing!!!" required></textarea>
+                </div>
+            </div>
+            <button class="btn btn-primary fa fa-comment">&nbsp;Fikrni yuborish</button>
+        </form>
+    {% else %}
+        <b>Fikr bildirish uchun <a href="{% url 'login' %}">ro'yxatdan o'ting.</a></b>
+    {% endif %}
+    <hr>
+    {#    <div class="card mb-3">#}
+    {#        <div class="row no-gutters">#}
+    {#            <div class="col-md-2">#}
+    {#                {% if post.author.profile.profile_image %}#}
+    {#                    <img src="#" class="card-img" alt="..." width="200"#}
+    {#                         height="200">#}
+    {#                {% else %}#}
+    {#                    <img src="{% static 'images/default.png' %}" class="card-img" alt="" width="200"#}
+    {#                         height="200">#}
+    {#                {% endif %}#}
+    {#            </div>#}
+    {#            <div class="col-md-10">#}
+    {#                <div class="card-body">#}
+    {#                    <h5 class="card-title">#}
+    {#                        {{ post.author.first_name }} {{ post.author.last_name }}#}
+    {#                    </h5>#}
+    {#                    <p class="small text-muted">#}
+    {#                        {% if user.profile.id %}#}
+    {#                            <a href="#">Profile Page</a>#}
+    {#                        {% endif %}#}
+    {#                    </p>#}
+    {#                    <p class="card-text">{{ post.author.profile.bio }}</p>#}
+    {#                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    {% if post.author == user %}#}
+    {#        <div>#}
+    {#            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Yangilash</a>#}
+    {#            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">O'chirish</a>#}
+    {#        </div><br>#}
+    {#    {% endif %}#}
+    {% if user.username == 'biiuz' %}
+        <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'update-post' post.id %}">Yangilash</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}">O'chirish</a>
+        </div><br> {% endif %}
+    <a href="{% url 'home' %}" class="btn btn-secondary">Orqaga</a><br><br><br><br>
+{% endblock %}

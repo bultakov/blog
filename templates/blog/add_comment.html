@@ -1,0 +1,18 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Kommentariya qo'shish
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}<br>
+        <h1>Yangi Kommentariya qo'shish...</h1><br><br>
+        <div class="form-group">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-secondary">Qo'shish</button>
+            </form>
+        </div>
+    {% else %}
+        <b><br><br>Iltimos oldin ro'yxatdan o'ting!!!</b>
+    {% endif %}
+{% endblock %}

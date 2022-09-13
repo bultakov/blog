@@ -1,0 +1,10 @@
+Django
+django-ckeditor
+django-crispy-forms
+django-js-asset
+django-ranged-response
+django-simple-captcha
+gunicorn
+Pillow
+psycopg2-binary
+upsidedown

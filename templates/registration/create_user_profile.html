@@ -1,0 +1,19 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Profil Qo'shish
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}<br>
+        <h1>Profil Qo'shish...</h1><br><br>
+        <div class="form-group">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {{ form.media }}
+                <button class="btn btn-secondary">Post</button>
+            </form>
+        </div>
+    {% else %}
+        <b><br><br>Iltimos oldin ro'yxatdan o'ting!!!</b>
+    {% endif %}
+{% endblock %}

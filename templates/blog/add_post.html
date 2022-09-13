@@ -1,0 +1,23 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Yangi Post hosil qilish
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}<br>
+        <h1>Yangi Post Qo'shish</h1><br><br>
+        <div class="form-group">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <button class="btn btn-secondary">Post</button>
+            </form>
+        </div>
+        <script>
+            const name = "{{ user.id }}";
+            document.getElementById('author').value = name;
+        </script>
+    {% else %}
+        <b><br><br>Iltimos oldin ro'yxatdan o'ting!!!</b>
+    {% endif %}
+{% endblock %}

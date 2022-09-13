@@ -1,0 +1,55 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Ro'yxatdan o'tish
+{% endblock %}
+{% block content %}
+    <h1>Ro'yxatdan o'tish...</h1><br><br>
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-9 register-right">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">Ro'yxatdan o'tish</h3>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li class="alert alert-info">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <form action="{% url 'register' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row register-form">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input name="username" type="text" class="form-control"
+                                               placeholder="Foydalanuvchi nomi *" required/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="first_name" type="text" class="form-control" placeholder="Ismingiz *" required/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="last_name" type="text" class="form-control" placeholder="Familiyangiz *" required/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="password1" type="password" class="form-control" placeholder="Parol *" required/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="password2" type="password" class="form-control" placeholder="Parolni tasdiqlash *" required/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input name="email" type="email" class="form-control" placeholder="Email *" required/>
+                                    </div>
+                                    {{ form.captcha }}
+                                    <input type="submit" class="btnRegister" value="Ro'yxatdan o'tish"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

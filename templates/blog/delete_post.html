@@ -1,0 +1,37 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Yangi Post hosil qilish
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}<br>
+        {% if user.id == post.author.id %}
+            <div class="content-section">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">
+                            Postni o'chirish...
+                        </legend>
+                        <h2>
+                            Rostan ham {{ post.title }}ni o'chirishni xoxlaysizmi?
+                        </h2>
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger" type="submit">
+                            Ha, O'chirilsin
+                        </button>
+                        <a class="btn btn-outline-secondary" type="submit" href="{% url 'post-view' post.id %}">
+                            Yo'q, O'chirilmasin
+                        </a>
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <h3>
+                Kechirasiz <b>{{ post.title }}</b> sizga tegishli emas!!!
+            </h3>
+        {% endif %}
+    {% else %}
+        <b><br><br>Iltimos oldin ro'yxatdan o'ting!!!</b>
+    {% endif %}
+{% endblock %}

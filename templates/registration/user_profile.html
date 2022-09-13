@@ -1,0 +1,50 @@
+{% extends 'bases.html' %}
+{% load static %}
+{% block title %}
+    {{ post.title_tag }}
+{% endblock %}
+{% block content %}
+    <h1>Profile Info</h1>
+    <hr><br>
+    {{ page_user }}
+    <div class="card mb-3">
+        <div class="row no-gutters">
+            <div class="col-md-2">
+                {% if page_user.profile_image %}
+                    <img src="{{ page_user.profile_image.url }}" class="card-img" alt="..." width="200"
+                         height="200">
+                {% else %}
+                    <img src="{% static 'images/default.png' %}" class="card-img" alt="" width="200"
+                         height="200">
+                {% endif %}
+            </div>
+            <div class="col-md-10">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ page_user.user.first_name }}
+                        {{ page_user.user.last_name }}
+                    </h5>
+                    <p class="small text-muted">
+                        {% if page_user.website_url %}
+                            <a href="{{ page_user.website_url }}">Website</a> |
+                        {% endif %}
+                        {% if page_user.facebook_url %}
+                            <a href="{{ page_user.facebook_url }}">Facebook</a> |
+                        {% endif %}
+                        {% if page_user.twitter_url %}
+                            <a href="{{ page_user.twitter_url }}">Twitter</a> |
+                        {% endif %}
+                        {% if page_user.instagram_url %}
+                            <a href="{{ page_user.instagram_url }}">Instagram</a> |
+                        {% endif %}
+                        {% if page_user.telegran_url %}
+                            <a href="{{ page_user.telegran_url }}">Telegram</a>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ page_user.bio }}</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

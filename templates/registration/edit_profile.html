@@ -1,0 +1,15 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Sozlamalar
+{% endblock %}
+{% block content %}
+    <h1>Sozlamalarni yangilash...</h1><br><br>
+    {{ user.profile.bio }}<br><br>
+    <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-outline-info">Yangilash</button>
+        </form>
+    </div>
+{% endblock %}

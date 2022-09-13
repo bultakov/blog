@@ -1,0 +1,46 @@
+{% extends "bases.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Kirish</h5>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li class="alert alert-info">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <form class="form-signin" method="post" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            <div class="form-label-group">
+                                <input name="username" id="inputEmail" class="form-control"
+                                       placeholder="Foydalanuvchi nomi"
+                                       required autofocus>
+                                <label for="inputEmail">Foydalanuvchi nomi</label>
+                            </div>
+                            <div class="form-label-group">
+                                <input name="password" type="password" id="inputPassword" class="form-control"
+                                       placeholder="Parol"
+                                       required>
+                                <label for="inputPassword">Parol</label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input name="remember_me" type="checkbox" class="custom-control-input"
+                                       id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">Parolni eslab qolish.</label>
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">
+                                Kirish
+                            </button>
+                        </form><br>
+                        <a href="{% url 'home' %}">Parolni unutdingizmi?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

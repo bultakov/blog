@@ -1,0 +1,23 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Profilni yangilash
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}<br>
+        {% if user.id == profile.user.id %}
+            <h1>Profilni yangilash...</h1><br><br>
+            <div class="form-group">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {{ form.media }}
+                    <button class="btn btn-secondary">Yangilash</button>
+                </form>
+            </div>
+        {% else %}
+            <b><br><br>Kechirasiz bu profil sizga tegishli emas!!!</b>
+        {% endif %}
+    {% else %}
+        <b><br><br>Iltimos oldin ro'yxatdan o'ting!!!</b>
+    {% endif %}
+{% endblock %}

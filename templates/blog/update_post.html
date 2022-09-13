@@ -1,0 +1,25 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Yangi Post hosil qilish
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}<br>
+        {% if user.id == post.author.id %}
+            <h1>Postni Yangilash</h1><br><br>
+            <div class="form-group"  enctype="multipart/form-data">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form.as_p }}
+                    <button class="btn btn-secondary">Yangilash</button>
+                </form>
+            </div>
+        {% else %}
+            <h3>
+                Kechirasiz <b>{{ post.title }}</b> sizga tegishli emas!!!
+            </h3>
+        {% endif %}
+    {% else %}
+        <b><br><br>Iltimos oldin ro'yxatdan o'ting!!!</b>
+    {% endif %}
+{% endblock %}

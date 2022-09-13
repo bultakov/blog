@@ -1,0 +1,92 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Bosh Sahifa
+{% endblock %}
+{% block content %}<br>
+    <div class="main-body section-gap">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert alert-info">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="container box_1170">
+            <div class="row">
+                <div class="col-lg-8 post-list">
+                    <section class="post-area">
+                        <div class="row">
+                            {% for post in object_list %}
+                                <article class="media content-section shadow-lg p-3 mb-5 bg-white rounded">
+                                    <img class="rounded-circle article-img" src="{{ post.image.url }}" alt="">
+                                    <div class="media-body">
+                                        <div class="article-metadata">
+                                            <small class="text-muted fa fa-calendar" aria-hidden="true">
+                                                &nbsp;&nbsp;{{ post.created_at }}
+                                            </small>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <i class="fa fa-eye text-muted" aria-hidden="true">
+                                                &nbsp;&nbsp;{{ post.views }}
+                                            </i>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <i class="fa fa-pencil text-muted" aria-hidden="true">
+                                                &nbsp;&nbsp;{{ post.comments.all.count }}
+                                            </i>
+                                        </div>
+                                        <h2>
+                                            <a class="article-title" href="{% url 'post-view' post.slug %}"
+                                               style="color: #18bc9c">
+                                                {{ post.title }}
+                                            </a>
+                                        </h2>
+                                        <p class="article-content">{{ post.snippet }}</p>
+                                        <div class="article-metadata">
+                                            <small class="text-muted fa fa-user" aria-hidden="true">
+                                                &nbsp;&nbsp;{{ post.author }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                            {% if is_paginated %}
+                                {% if page_obj.has_previous %}
+                                    <a class="btn btn-outline-info mb-4" href="?page=1">Birinchi</a>
+                                    <a class="btn btn-outline-info mb-4"
+                                       href="?page={{ page_obj.previous_page_number }}">Oldingi</a>
+                                {% endif %}
+
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Keyingi</a>
+                                    <a class="btn btn-outline-info mb-4"
+                                       href="?page={{ page_obj.paginator.num_pages }}">Oxirgi</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-4 post-list">
+                    <article class="media content-section shadow-lg p-3 mb-5 bg-white rounded">
+                        <ul>
+                            <h3>Eng ko'p o'qilganlar</h3>
+                            <hr>
+                            {% for foo in top %}
+                                <li>
+                                    <a href="{% url 'post-view' foo.slug %}">
+                                        {{ foo.title }}
+                                    </a>
+                                </li>
+                                <hr>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

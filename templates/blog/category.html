@@ -1,0 +1,37 @@
+{% extends 'bases.html' %}
+{% block title %}
+    Toifalar ro'yxati
+{% endblock %}
+{% block content %}<br>
+    {% if category_post %}
+        <h1><b>{{ name }}</b> kategoriyasiga tegishli postlar ro'yxati</h1>
+        {% for post in category_post %}
+            <article class="media content-section shadow-lg p-3 mb-5 bg-white rounded">
+                <img class="rounded-circle article-img" src="{{ post.image.url }}" alt="">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <small class="text-muted fa fa-calendar" aria-hidden="true">
+                            &nbsp;&nbsp;{{ post.created_at }}
+                        </small>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-eye text-muted" aria-hidden="true">
+                            &nbsp;&nbsp;{{ post.views }}
+                        </i>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-pencil text-muted" aria-hidden="true">
+                            &nbsp;&nbsp;{{ post.comments.all.count }}
+                        </i>
+                    </div>
+                    <h2><a class="article-title" href="{% url 'post-view' post.slug %}"
+                           style="color: #18bc9c">{{ post.title }}</a></h2>
+                    <p class="article-content">{{ post.snippet }}</p>
+                    <div class="article-metadata">
+                        <small class="text-muted fa fa-user" aria-hidden="true">
+                            &nbsp;&nbsp;{{ post.author }}
+                        </small>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    {% else %}
+        <br><h2>Kechirasiz <b>{{ name }}</b> kategoriyasi bo'yicha ma'lumot topilmadi!!!</h2>
+    {% endif %}
+{% endblock %}
